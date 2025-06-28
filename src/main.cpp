@@ -16,11 +16,6 @@ portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 portMUX_TYPE irigMux = portMUX_INITIALIZER_UNLOCKED;
 
 #define JJY_HZ 10
-#define JJY_OUTPUT_0 (0.8 * JJY_HZ)
-#define JJY_OUTPUT_1 (0.5 * JJY_HZ)
-#define JJY_OUTPUT_MARK (0.2 * JJY_HZ)
-#define JJY_OUTPUT_END -1
-
 volatile int jjyCounter = 0;
 
 clockManager cm(80, JJY_HZ);
