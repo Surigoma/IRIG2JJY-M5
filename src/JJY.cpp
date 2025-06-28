@@ -12,10 +12,10 @@ void JJY::initialize(uint8_t pin, uint16_t Hz, uint64_t time,
     timerAlarmWrite(this->timer, time, true);
     timerAlarmEnable(this->timer);
     timerStop(this->timer);
-    jjy_signal[0] = 0.8 * Hz;
-    jjy_signal[1] = 0.5 * Hz;
-    jjy_signal[2] = 0.2 * Hz;
-    jjy_signal[3] = -1;
+    jjy_signal[JJY_0] = 0.8 * Hz;
+    jjy_signal[JJY_1] = 0.5 * Hz;
+    jjy_signal[JJY_M] = 0.2 * Hz;
+    jjy_signal[JJY_E] = -1;
 }
 
 void JJY::enableTimer() {
@@ -31,19 +31,19 @@ volatile int8_t *JJY::encodeIBCD(volatile int8_t *o, int r, const int tbl[],
     int c = r;
     for (uint8_t counter = 0; counter < tbl_len; counter++) {
         if (tbl[counter] < 0) {
-            *itr = jjy_signal[2];
+            *itr = jjy_signal[JJY_M];
         } else if (tbl[counter] > 0 && c >= tbl[counter]) {
             c -= tbl[counter];
-            *itr = jjy_signal[1];
+            *itr = jjy_signal[JJY_1];
         } else {
-            *itr = jjy_signal[0];
+            *itr = jjy_signal[JJY_0];
         }
         itr++;
     }
     return itr;
 }
 volatile int8_t *JJY::insertMarker(volatile int8_t *o) {
-    *o = jjy_signal[2];
+    *o = jjy_signal[JJY_M];
     return o + 1;
 }
 volatile int8_t *JJY::insertEND(volatile int8_t *o) {
@@ -53,7 +53,7 @@ volatile int8_t *JJY::insertEND(volatile int8_t *o) {
 volatile int8_t *JJY::insertZero(volatile int8_t *o, size_t len) {
     volatile int8_t *itr = o;
     for (size_t i = 0; i < len; i++) {
-        *itr = jjy_signal[0];
+        *itr = jjy_signal[JJY_0];
         itr++;
     }
     return itr;
@@ -83,7 +83,7 @@ void JJY::generateJJY() {
     const int yodTbl[] = {0, 0, 200, 100, 0, 80, 40, 20, 10, -1, 8, 4, 2, 1};
     const int yearTbl[] = {0, 80, 40, 20, 10, 8, 4, 2, 1};
     const int wdayTbl[] = {4, 2, 1};
-    generated[0] = jjy_signal[2];
+    generated[0] = jjy_signal[JJY_M];
     itr = insertMarker(itr);
     itr = encodeIBCD(itr, time.tm_min, minTbl, container_of(minTbl));
     itr = insertMarker(itr);
@@ -109,7 +109,7 @@ void JJY::generateJJY() {
 
 int8_t JJY::read() {
     int8_t r = generated[generated_index++];
-    if (generated[generated_index] == jjy_signal[3] ||
+    if (generated[generated_index] == jjy_signal[JJY_E] ||
         generated_index >= container_of(generated)) {
         generated_index = 0;
     }

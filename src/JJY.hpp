@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <M5GFX.h>
 
+enum JJY_SIGNAL { JJY_0 = 0, JJY_1, JJY_M, JJY_E };
+
 class JJY {
    public:
     JJY();
