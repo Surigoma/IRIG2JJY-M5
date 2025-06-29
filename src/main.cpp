@@ -6,7 +6,7 @@
 #include "JJY.hpp"
 #include "clockManager.hpp"
 #include "define.hpp"
-#define container_of(a) (sizeof(a) / sizeof(*a))
+#define container_of(a) (sizeof(a) / sizeof(a[0]))
 
 TaskHandle_t tasks[2];
 
