@@ -165,5 +165,6 @@ void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData) {
                 canvas->printf("\n");
             }
         }
+        canvas->setTextColor(WHITE);
     }
 }
