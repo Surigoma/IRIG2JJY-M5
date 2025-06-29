@@ -121,16 +121,16 @@ int8_t JJY::read_isr() {
 }
 
 void JJY::update() {
+    if (!getLocalTime(&time, 10)) {
+        return;
+    }
     portENTER_CRITICAL(&mux);
-    getLocalTime(&time, 10);
-    portEXIT_CRITICAL(&mux);
     if (time.tm_sec == 0 && priv_sec != time.tm_sec) {
-        portENTER_CRITICAL(&mux);
         needsGenerate = true;
         generated_index = 0;
-        portEXIT_CRITICAL(&mux);
     }
     priv_sec = time.tm_sec;
+    portEXIT_CRITICAL(&mux);
     if (this->needsGenerate) {
         generateJJY();
     }

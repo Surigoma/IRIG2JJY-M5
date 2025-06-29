@@ -55,8 +55,8 @@ JJY jjy;
  * @note Operates IRIG/clockManager/JJY within interrupt
  */
 void IRAM_ATTR onIRIGEdge() {
+    bool isHigh = digitalRead(IRIG_PIN) == HIGH;
     portENTER_CRITICAL_ISR(&irigMux);
-    bool isHigh = digitalRead(IRIG_PIN);
     if (isHigh) {
         cm.IRIGPreEdge();
         irig.onEdgeRising();

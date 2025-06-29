@@ -9,9 +9,9 @@ void IRIG::initialize(uint8_t pin, void (*callback)()) {
 }
 
 void IRIG::onEdgeRising() {
-    portENTER_CRITICAL(&mux);
+    portENTER_CRITICAL_ISR(&mux);
     privTime = millis();
-    portEXIT_CRITICAL(&mux);
+    portEXIT_CRITICAL_ISR(&mux);
 }
 
 IRIGResult IRIG::onEdgeFall() {
@@ -29,8 +29,8 @@ IRIGResult IRIG::onEdgeFall() {
     if (code < IRIG_M) {
         return IRIGResult::NONE;
     }
+    portENTER_CRITICAL_ISR(&mux);
     if (code == IRIG_M && privCode == IRIG_M) {
-        portENTER_CRITICAL(&mux);
         listen[listenIndex++] = code;
         if (listenIndex >= container_of(listen)) {
             listenIndex = 0;
@@ -40,9 +40,9 @@ IRIGResult IRIG::onEdgeFall() {
             needDecode = true;
             result = IRIGResult::DETECT_FIRST;
         }
-        portEXIT_CRITICAL(&mux);
     }
     privCode = code;
+    portEXIT_CRITICAL_ISR(&mux);
     return result;
 }
 
@@ -118,24 +118,22 @@ void IRIG::decodeIRIG() {
     time.tm_mday++;
     ptr += 6;  // Skip Marker
     ptr = decodeBCD2(ptr, &time.tm_year);
+    portEXIT_CRITICAL(&mux);
     now = {.tv_sec = mktime(&time), .tv_usec = 0};
     getLocalTime(&current, 10);
     if (current.tm_year != time.tm_year || current.tm_yday != time.tm_yday ||
         current.tm_hour != time.tm_hour || current.tm_min != time.tm_min) {
         settimeofday(&now, NULL);
     }
-    portEXIT_CRITICAL(&mux);
 }
 
 void IRIG::update() {
-    portENTER_CRITICAL(&mux);
     if (this->needDecode) {
         if (validateIRIG()) {
             decodeIRIG();
         }
         this->needDecode = false;
     }
-    portEXIT_CRITICAL(&mux);
     return;
 }
 
@@ -143,7 +141,6 @@ void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData) {
     if (canvas == nullptr) {
         return;
     }
-    portENTER_CRITICAL(&mux);
     canvas->printf("D:%d %d %d:%d:%d %s\n", time.tm_year + 1900, time.tm_yday,
                    time.tm_hour, time.tm_min, time.tm_sec,
                    needDecode ? "*" : "");
@@ -163,5 +160,4 @@ void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData) {
             }
         }
     }
-    portEXIT_CRITICAL(&mux);
 }
