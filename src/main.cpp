@@ -39,7 +39,6 @@ void IRAM_ATTR onIRIGEdge() {
     portEXIT_CRITICAL_ISR(&irigMux);
 }
 
-volatile int sec_priv = 0;
 void IRAM_ATTR onOutTimer() {
     portENTER_CRITICAL_ISR(&timerMux);
     int data = jjy.read();
@@ -69,7 +68,7 @@ void initializeLCD() {
     M5.Display.fillScreen(BLUE);
     M5.Display.setRotation(1);
     M5.Display.setBrightness(128);
-    Serial.printf("x: %d, y: %d\n", M5.Display.width(), M5.Display.height());
+    canvas = new M5Canvas(&M5.Display);
     canvas->createSprite(M5.Display.width(), M5.Display.height());
     if (M5.Display.width() < M5.Display.height()) {
         M5.Display.setRotation(M5.Display.getRotation() ^ 1);
@@ -84,7 +83,6 @@ void initializeLCD() {
     updateScreen();
 }
 
-#define TIMER_10Hz (100000 / 1)
 void initializeTimer() { timerSemaphore = xSemaphoreCreateBinary(); }
 
 void initializeHW() {
@@ -94,9 +92,6 @@ void initializeHW() {
     M5cfg.clear_display = true;
     M5cfg.fallback_board = m5::board_t::board_M5StickCPlus;
     M5.begin(M5cfg);
-    canvas = new M5Canvas(&M5.Display);
-    pinMode(JJY_PIN, OUTPUT);
-    pinMode(JJY1_PIN, OUTPUT);
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
 }
@@ -136,7 +131,7 @@ static int counter = 0;
 static uint64_t current, privClock = cm.clock();
 void loop() {
     counter++;
-    bool update = true;  // counter > 10;
+    bool update = counter > 5;
     M5.update();
     if (update) {
         canvas->fillSprite(BLACK);
@@ -146,12 +141,10 @@ void loop() {
         irig.debug(canvas, false);
         jjy.debug(canvas);
     }
-    if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE) {
-        current = cm.clock();
-        if (privClock != current) {
-            Serial.printf("update: %llu -> %llu\n", privClock, current);
-            privClock = current;
-        }
+    current = cm.clock();
+    if (privClock != current) {
+        Serial.printf("update: %llu -> %llu\n", privClock, current);
+        privClock = current;
     }
     if (update) updateScreen();
     if (M5.BtnA.isPressed()) {
