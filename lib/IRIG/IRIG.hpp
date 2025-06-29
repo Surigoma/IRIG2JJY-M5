@@ -79,7 +79,7 @@ class IRIG {
     struct tm time = {0};                 ///< Decoded time
     volatile bool needDecode = false;     ///< Flag for decode request
     volatile unsigned long privTime = 0;  ///< Last edge timestamp
-    volatile int privCode = 0;            ///< Last code
+    volatile int privCode = -2;           ///< Last code
     volatile int8_t listen[100];          ///< Raw IRIG data buffer
     volatile int8_t captured[100];        ///< Captured IRIG data
     int listenIndex = 0;                  ///< Buffer index
