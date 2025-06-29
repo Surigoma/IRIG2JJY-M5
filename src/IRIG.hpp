@@ -20,7 +20,6 @@ class IRIG {
     void onEdgeRising();
     IRIGResult onEdgeFall();
     void debug(M5Canvas *canvas, bool dumpCaptureData = false);
-    int8_t nextCode();
     void resetIndex();
     void update();
     struct tm getTm() { return this->time; }
@@ -34,7 +33,6 @@ class IRIG {
     volatile int8_t listen[100];
     volatile int8_t captured[100];
     int listenIndex = 0;
-    int outIndex = 0;
     void decodeIRIG();
     bool validateIRIG();
 };
