@@ -121,8 +121,8 @@ void loop() {
         canvas->setCursor(0, 0);
         counter = 0;
         cm.debug(canvas);
-        irig.debug(false);
-        jjy.debug();
+        irig.debug(canvas, false);
+        jjy.debug(canvas);
     }
     if (xSemaphoreTake(timerSemaphore, 0) == pdTRUE) {
         current = cm.clock();

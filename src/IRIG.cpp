@@ -3,9 +3,7 @@
 
 IRIG::IRIG() { this->needDecode = xSemaphoreCreateBinary(); }
 
-void IRIG::initialize(uint8_t pin, void (*callback)(),
-                      M5Canvas *canvas = nullptr) {
-    this->canvas = canvas;
+void IRIG::initialize(uint8_t pin, void (*callback)()) {
     pinMode(pin, INPUT_PULLDOWN);
     attachInterrupt(digitalPinToInterrupt(pin), callback, CHANGE);
 }
@@ -131,7 +129,7 @@ void IRIG::update() {
     return;
 }
 
-void IRIG::debug(bool dumpCaptureData = false) {
+void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData = false) {
     if (canvas) {
         return;
     }

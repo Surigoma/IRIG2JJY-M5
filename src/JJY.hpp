@@ -7,18 +7,17 @@ class JJY {
    public:
     JJY();
     void initialize(uint8_t pin, uint16_t divide, uint64_t time,
-                    void (*callback)(), M5Canvas *canvas);
+                    void (*callback)());
     void enableTimer();
     void updateTimer(uint64_t time);
     void generateJJY();
     void update();
     int8_t read();
-    void debug();
+    void debug(M5Canvas *canvas);
 
    private:
     int8_t jjy_signal[4] = {0};
     hw_timer_t *timer = nullptr;
-    M5Canvas *canvas;
     int priv_sec = 0;
     struct tm time = {0};
     volatile int8_t generated[62] = {0};

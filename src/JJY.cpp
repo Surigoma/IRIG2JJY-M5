@@ -4,8 +4,7 @@
 JJY::JJY() {}
 
 void JJY::initialize(uint8_t pin, uint16_t Hz, uint64_t time,
-                     void (*callback)(), M5Canvas *canvas) {
-    this->canvas = canvas;
+                     void (*callback)()) {
     pinMode(pin, OUTPUT);
     this->timer = timerBegin(0, Hz, true);
     timerAttachInterrupt(this->timer, callback, true);
@@ -128,7 +127,7 @@ void JJY::update() {
     }
 }
 
-void JJY::debug() {
+void JJY::debug(M5Canvas *canvas) {
     canvas->printf("time: %d/%d/%d %d:%d:%d\n", 1900 + time.tm_year,
                    time.tm_mon + 1, time.tm_mday, time.tm_hour, time.tm_min,
                    time.tm_sec);

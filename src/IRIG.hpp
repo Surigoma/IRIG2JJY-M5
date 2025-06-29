@@ -14,17 +14,16 @@ enum IRIGResult {
 class IRIG {
    public:
     IRIG();
-    void initialize(uint8_t pin, void (*callback)(), M5Canvas *canvas);
+    void initialize(uint8_t pin, void (*callback)());
     void onEdgeRising();
     IRIGResult onEdgeFall();
-    void debug(bool dumpCaptureData);
+    void debug(M5Canvas *canvas, bool dumpCaptureData);
     int8_t nextCode();
     void resetIndex();
     void update();
     struct tm getTm() { return this->time; }
 
    private:
-    M5Canvas *canvas;
     struct tm time = {0};
     volatile bool needDecode = false;
     volatile unsigned long privTime = 0;
