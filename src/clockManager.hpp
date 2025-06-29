@@ -1,3 +1,5 @@
+#ifndef __CLOCKMANAGER_HPP__
+#define __CLOCKMANAGER_HPP__
 #include <M5Unified.h>
 
 #include <queue>
@@ -34,3 +36,4 @@ class clockManager {
     uint16_t getDiv() { return div; }
     uint16_t getHz() { return HZ; }
 };
+#endif  // __CLOCKMANAGER_HPP__

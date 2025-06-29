@@ -1,3 +1,5 @@
+#ifndef __JJY_HPP__
+#define __JJY_HPP__
 #include <Arduino.h>
 #include <M5GFX.h>
 
@@ -31,3 +33,4 @@ class JJY {
     volatile int8_t *encodeIBCD(volatile int8_t *o, int r, const int tbl[],
                                 size_t tbl_len);
 };
+#endif  // __JJY_HPP__

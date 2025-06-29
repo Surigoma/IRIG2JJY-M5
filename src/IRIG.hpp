@@ -1,3 +1,5 @@
+#ifndef __IRIG_HPP__
+#define __IRIG_HPP__
 #include <Arduino.h>
 #include <M5GFX.h>
 
@@ -35,3 +37,4 @@ class IRIG {
     void decodeIRIG();
     bool validateIRIG();
 };
+#endif  // __IRIG_HPP__
