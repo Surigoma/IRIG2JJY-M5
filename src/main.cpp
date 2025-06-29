@@ -75,12 +75,13 @@ void IRAM_ATTR onIRIGEdge() {
  */
 void IRAM_ATTR onOutTimer() {
     portENTER_CRITICAL_ISR(&timerMux);
-    int data = jjy.read_isr();
+    static int data = 0;
     int i = jjyCounter;
     if (jjyCounter == 0) {
         if (cm.JJYEdge()) {
             xSemaphoreGiveFromISR(timerSemaphore, NULL);
         }
+        data = jjy.read_isr();
     }
     jjyCounter++;
     if (jjyCounter >= cm.getHz()) {
