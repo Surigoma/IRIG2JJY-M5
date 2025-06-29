@@ -88,7 +88,7 @@ volatile int8_t *decodeBCD3(volatile int8_t *o, int *r) {
         counter++;
         itr++;
     }
-    return --itr;
+    return itr;
 }
 bool IRIG::validateIRIG() {
     if (captured[0] != -1) {
@@ -116,7 +116,7 @@ void IRIG::decodeIRIG() {
     ptr++;  // Skip Marker
     ptr = decodeBCD3(ptr, &time.tm_mday);
     time.tm_mday++;
-    ptr += 7;  // Skip Marker
+    ptr += 6;  // Skip Marker
     ptr = decodeBCD2(ptr, &time.tm_year);
     now = {.tv_sec = mktime(&time), .tv_usec = 0};
     getLocalTime(&current, 10);
