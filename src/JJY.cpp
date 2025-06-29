@@ -46,7 +46,7 @@ volatile int8_t *JJY::insertMarker(volatile int8_t *o) {
     return o + 1;
 }
 volatile int8_t *JJY::insertEND(volatile int8_t *o) {
-    *o = jjy_signal[4];
+    *o = jjy_signal[JJY_E];
     return o + 1;
 }
 volatile int8_t *JJY::insertZero(volatile int8_t *o, size_t len) {
