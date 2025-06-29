@@ -159,11 +159,10 @@ void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData) {
                 canvas->printf("%d", captured[i]);
             } else {
                 canvas->setTextColor(WHITE);
-                canvas->printf("M%s", mcount % 2 == 0 && mcount > 0 &&
-                                              i != container_of(captured) - 1
-                                          ? "\n"
-                                          : "");
-                mcount++;
+                canvas->printf("M");
+            }
+            if (i % 20 == 19) {
+                canvas->printf("\n");
             }
         }
     }
