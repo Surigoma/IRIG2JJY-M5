@@ -212,6 +212,7 @@ void loop() {
     current = cm.clock();
     if (privClock != current) {
         Serial.printf("update: %llu -> %llu\n", privClock, current);
+        jjy.updateTimer(current);
         privClock = current;
     }
     if (update) updateScreen();
