@@ -103,6 +103,7 @@ void JJY::generateJJY() {
     itr = insertZero(itr, 4);
     itr = insertMarker(itr);
     itr = insertEND(itr);
+    needsGenerate = false;
     return;
 }
 
@@ -118,7 +119,7 @@ int8_t JJY::read() {
 void JJY::update() {
     getLocalTime(&time, 10);
     if (time.tm_sec == 0 && priv_sec != time.tm_sec) {
-        generated_index = true;
+        needsGenerate = true;
         generated_index = 0;
     }
     priv_sec = time.tm_sec;
