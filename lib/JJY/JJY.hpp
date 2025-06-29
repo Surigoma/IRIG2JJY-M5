@@ -53,6 +53,11 @@ class JJY {
      * @param canvas Canvas object
      */
     void debug(M5Canvas *canvas);
+    /**
+     * @brief Set the current time for JJY signal generation (for testing)
+     * @param t struct tm value
+     */
+    void setTime(const struct tm &t) { time = t; }
 
    private:
     portMUX_TYPE mux =

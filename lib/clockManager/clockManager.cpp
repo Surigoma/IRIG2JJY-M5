@@ -1,7 +1,7 @@
 #include "clockManager.hpp"
 #define container_of(a) (sizeof(a) / sizeof(a[0]))
 
-clockManager::clockManager(uint32_t divide, uint16_t Hz, bool isDebug = false) {
+clockManager::clockManager(uint32_t divide, uint16_t Hz, bool isDebug) {
     logLen = container_of(this->log);
     this->isDebug = isDebug;
     div = divide;

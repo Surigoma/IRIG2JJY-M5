@@ -59,6 +59,19 @@ class IRIG {
      * @return struct tm
      */
     struct tm getTm() { return this->time; }
+    /**
+     * @brief Set the captured buffer for testing
+     * @param buf Pointer to buffer
+     * @param len Length of buffer
+     */
+    void setCaptured(const int *buf, int len) {
+        for (int i = 0; i < len && i < 100; ++i) captured[i] = buf[i];
+    }
+    /**
+     * @brief Set the needDecode flag for testing
+     * @param v Value to set
+     */
+    void setNeedDecode(bool v) { needDecode = v; }
 
    private:
     portMUX_TYPE mux =
