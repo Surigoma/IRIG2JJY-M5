@@ -83,6 +83,7 @@ class IRIG {
     volatile int8_t listen[100];          ///< Raw IRIG data buffer
     volatile int8_t captured[100];        ///< Captured IRIG data
     int listenIndex = 0;                  ///< Buffer index
+    bool capturing = false;               ///< Captureing flag
     /**
      * @brief Decode captured IRIG data
      */

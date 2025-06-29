@@ -6,6 +6,7 @@ IRIG::IRIG() {}
 void IRIG::initialize(uint8_t pin, void (*callback)()) {
     pinMode(pin, INPUT_PULLDOWN);
     attachInterrupt(digitalPinToInterrupt(pin), callback, CHANGE);
+    capturing = false;
 }
 
 void IRIG::onEdgeRising() {
@@ -31,17 +32,23 @@ IRIGResult IRIG::onEdgeFall() {
     }
     portENTER_CRITICAL_ISR(&mux);
     if (code == IRIG_M && privCode == IRIG_M) {
-        listen[listenIndex++] = code;
-        if (listenIndex >= container_of(listen)) {
-            listenIndex = 0;
+        if (capturing) {
             for (int i = 0; i < container_of(captured); i++) {
                 captured[i] = listen[i];
             }
             needDecode = true;
             result = IRIGResult::DETECT_FIRST;
         }
+        capturing = true;
+        listenIndex = 0;
     }
     privCode = code;
+    if (capturing) {
+        listen[listenIndex++] = code;
+        if (listenIndex >= container_of(listen)) {
+            listenIndex = 0;
+        }
+    }
     portEXIT_CRITICAL_ISR(&mux);
     return result;
 }
