@@ -51,7 +51,7 @@ volatile int8_t *decodeBCD2(volatile int8_t *o, int *r) {
     uint8_t counter = 0;
     volatile int8_t *itr = o;
     *r = 0;
-    while (counter < sizeof(tbl) / sizeof(*tbl)) {
+    while (counter < container_of(tbl)) {
         switch (*itr) {
             case 1:
                 *r += tbl[counter];
@@ -73,7 +73,7 @@ volatile int8_t *decodeBCD3(volatile int8_t *o, int *r) {
     uint8_t counter = 0;
     volatile int8_t *itr = o;
     *r = 0;
-    while (counter < sizeof(tbl) / sizeof(*tbl)) {
+    while (counter < container_of(tbl)) {
         switch (*itr) {
             case 1:
                 *r += tbl[counter];
@@ -83,7 +83,7 @@ volatile int8_t *decodeBCD3(volatile int8_t *o, int *r) {
                 break;
             default:
                 Serial.printf("Oops!\n");
-                return o + sizeof(tbl) / sizeof(*tbl);
+                return &o[container_of(tbl)];
         }
         counter++;
         itr++;
