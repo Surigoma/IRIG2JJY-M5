@@ -161,7 +161,7 @@ void irigTask(void *arg) {
  */
 void jjyTask(void *arg) {
     JJY *jjy = (JJY *)arg;
-    jjy->initialize(JJY_PIN, cm.getDiv(), cm.clock(), onOutTimer);
+    jjy->initialize(JJY_PIN, cm.getDiv(), cm.getHz(), cm.clock(), onOutTimer);
     while (true) {
         jjy->update();
     }

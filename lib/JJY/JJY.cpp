@@ -3,10 +3,10 @@
 
 JJY::JJY() {}
 
-void JJY::initialize(uint8_t pin, uint16_t Hz, uint64_t time,
+void JJY::initialize(uint8_t pin, uint16_t divide, uint16_t Hz, uint64_t time,
                      void (*callback)()) {
     pinMode(pin, OUTPUT);
-    this->timer = timerBegin(0, Hz, true);
+    this->timer = timerBegin(0, divide, true);
     timerAttachInterrupt(this->timer, callback, true);
     timerAlarmWrite(this->timer, time, true);
     timerAlarmEnable(this->timer);

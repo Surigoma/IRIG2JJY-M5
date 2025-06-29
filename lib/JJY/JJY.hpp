@@ -21,10 +21,11 @@ class JJY {
      * @brief Initialize JJY output pin and timer
      * @param pin GPIO pin number
      * @param divide Timer divider
+     * @param Hz Frequency
      * @param time Timer period
      * @param callback Timer interrupt callback
      */
-    void initialize(uint8_t pin, uint16_t divide, uint64_t time,
+    void initialize(uint8_t pin, uint16_t divide, uint16_t Hz, uint64_t time,
                     void (*callback)());
     /**
      * @brief Enable JJY timer
