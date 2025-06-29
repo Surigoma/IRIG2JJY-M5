@@ -5,7 +5,7 @@
 class clockManager {
    private:
     int64_t log[5];
-    size_t logLen;
+    size_t logLen = 5;
     volatile size_t write_index = 0;
     volatile size_t counter = 0;
     uint16_t div;
