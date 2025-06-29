@@ -1,7 +1,7 @@
 #include "IRIG.hpp"
 #define container_of(a) (sizeof(a) / sizeof(a[0]))
 
-IRIG::IRIG() { this->needDecode = xSemaphoreCreateBinary(); }
+IRIG::IRIG() {}
 
 void IRIG::initialize(uint8_t pin, void (*callback)()) {
     pinMode(pin, INPUT_PULLDOWN);
