@@ -35,11 +35,12 @@ bool clockManager::calcEdge() {
     if (counter <= logLen) {
         counter++;
     }
+    updated = true;
     return counter >= logLen;
 }
 uint64_t clockManager::clock() {
     int64_t sum = 0;
-    if (counter < logLen) {
+    if (!updated || counter < logLen) {
         return (div_base / HZ);
     }
     for (size_t i = 0U; i < logLen; i++) {

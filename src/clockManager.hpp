@@ -21,6 +21,7 @@ class clockManager {
     int64_t mulclock;
     int64_t priv = -1;
     bool isDebug = false;
+    bool updated = false;
 
    public:
     clockManager(uint32_t divide, uint16_t Hz, bool isDebug = false);
