@@ -29,7 +29,7 @@ class clockManager {
     bool calcEdge();
     uint64_t clock();
     void debug(M5Canvas *canvas, bool dumpCaptureData = false);
-    uint16_t getDiv() { return div; }
-    uint16_t getHz() { return HZ; }
+    inline uint16_t getDiv() { return div; }
+    inline uint16_t getHz() { return HZ; }
 };
 #endif  // __CLOCKMANAGER_HPP__
