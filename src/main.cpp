@@ -153,6 +153,7 @@ void irigTask(void *arg) {
     irig->initialize(IRIG_PIN, onIRIGEdge);
     while (true) {
         irig->update();
+        delay(10);
     }
 }
 
@@ -165,6 +166,7 @@ void jjyTask(void *arg) {
     jjy->initialize(JJY_PIN, cm.getDiv(), cm.getHz(), cm.clock(), onOutTimer);
     while (true) {
         jjy->update();
+        delay(10);
     }
 }
 
