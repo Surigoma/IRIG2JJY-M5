@@ -8,6 +8,8 @@
 #include "define.hpp"
 #define container_of(a) (sizeof(a) / sizeof(*a))
 
+TaskHandle_t tasks[2];
+
 volatile SemaphoreHandle_t timerSemaphore;
 
 static M5Canvas *canvas;
@@ -99,12 +101,34 @@ void initializeHW() {
     digitalWrite(LED_PIN, HIGH);
 }
 
+void irigTask(void *arg) {
+    IRIG *irig = (IRIG *)arg;
+    irig->initialize(IRIG_PIN, onIRIGEdge);
+    while (true) {
+        irig->update();
+    }
+}
+
+void jjyTask(void *arg) {
+    JJY *jjy = (JJY *)arg;
+    jjy->initialize(JJY_PIN, cm.getDiv(), cm.clock(), onOutTimer);
+    while (true) {
+        jjy->update();
+    }
+}
+
+void taskSetup() {
+    xTaskCreatePinnedToCore(irigTask, "IRIG task", 4096, &irig, 2, &tasks[0],
+                            PRO_CPU_NUM);
+    xTaskCreatePinnedToCore(jjyTask, "JJY Task", 4096, &jjy, 2, &tasks[1],
+                            APP_CPU_NUM);
+}
+
 void setup() {
     initializeHW();
     initializeLCD();
     initializeTimer();
-    delay(500);
-    irig.initialize(IRIG_PIN, onIRIGEdge, canvas);
+    taskSetup();
     Serial.printf("Board: %d\n", M5.getBoard());
 }
 
@@ -114,8 +138,6 @@ void loop() {
     counter++;
     bool update = true;  // counter > 10;
     M5.update();
-    irig.update();
-    jjy.update();
     if (update) {
         canvas->fillSprite(BLACK);
         canvas->setCursor(0, 0);
