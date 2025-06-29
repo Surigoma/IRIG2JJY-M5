@@ -140,7 +140,7 @@ void IRIG::update() {
 }
 
 void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData) {
-    if (canvas) {
+    if (canvas == nullptr) {
         return;
     }
     portENTER_CRITICAL(&mux);
