@@ -7,7 +7,7 @@ using namespace std;
 class clockManager {
    private:
     int64_t log[5];
-    size_t logLen = container_of(log);
+    size_t logLen;
     volatile size_t write_index = 0;
     volatile int counter = 0;
     uint16_t div;
