@@ -149,8 +149,10 @@ void initializeHW() {
  * @param arg Pointer to IRIG instance
  */
 void irigTask(void *arg) {
+Serial.printf("IRIG task started arg:%p\n", arg);
     IRIG *irig = (IRIG *)arg;
     irig->initialize(IRIG_PIN, onIRIGEdge);
+Serial.printf("IRIG Initialized\n");
     while (true) {
         irig->update();
         delay(10);
@@ -162,8 +164,10 @@ void irigTask(void *arg) {
  * @param arg Pointer to JJY instance
  */
 void jjyTask(void *arg) {
+Serial.printf("JJY task started arg:%p\n", arg);
     JJY *jjy = (JJY *)arg;
     jjy->initialize(JJY_PIN, cm.getDiv(), cm.getHz(), cm.clock(), onOutTimer);
+Serial.printf("JJY Initialized\n");
     while (true) {
         jjy->update();
         delay(10);
@@ -184,10 +188,15 @@ void taskSetup() {
  * @brief Arduino setup function
  */
 void setup() {
+Serial.write("Start initializing...\n");
     initializeHW();
+Serial.write("Initialed HW\n");
     initializeLCD();
+Serial.write("Initialed LCD\n");
     initializeTimer();
+Serial.write("Initialed Timer\n");
     taskSetup();
+Serial.write("Created tasks\n");
     Serial.printf("Board: %d\n", M5.getBoard());
 }
 
@@ -206,8 +215,9 @@ void loop() {
         canvas->setCursor(0, 0);
         counter = 0;
         cm.debug(canvas);
-        irig.debug(canvas, false);
+        irig.debug(canvas, true);
         jjy.debug(canvas);
+canvas->printf("m: %d\n", jjyCounter);
     }
     current = cm.clock();
     if (privClock != current) {
