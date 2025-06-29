@@ -14,10 +14,11 @@ class JJY {
     void updateTimer(uint64_t time);
     void generateJJY();
     void update();
-    int8_t read();
+    int8_t read_isr();
     void debug(M5Canvas *canvas);
 
    private:
+    portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
     int8_t jjy_signal[4] = {0};
     hw_timer_t *timer = nullptr;
     int priv_sec = 0;

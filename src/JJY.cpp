@@ -82,6 +82,7 @@ void JJY::generateJJY() {
     const int yodTbl[] = {0, 0, 200, 100, 0, 80, 40, 20, 10, -1, 8, 4, 2, 1};
     const int yearTbl[] = {0, 80, 40, 20, 10, 8, 4, 2, 1};
     const int wdayTbl[] = {4, 2, 1};
+    portENTER_CRITICAL(&mux);
     generated[0] = jjy_signal[JJY_M];
     itr = insertMarker(itr);
     itr = encodeIBCD(itr, time.tm_min, minTbl, container_of(minTbl));
@@ -104,23 +105,30 @@ void JJY::generateJJY() {
     itr = insertMarker(itr);
     itr = insertEND(itr);
     needsGenerate = false;
+    portEXIT_CRITICAL(&mux);
     return;
 }
 
-int8_t JJY::read() {
+int8_t JJY::read_isr() {
+    portENTER_CRITICAL_ISR(&mux);
     int8_t r = generated[generated_index++];
     if (generated[generated_index] == jjy_signal[JJY_E] ||
         generated_index >= container_of(generated)) {
         generated_index = 0;
     }
+    portEXIT_CRITICAL_ISR(&mux);
     return r;
 }
 
 void JJY::update() {
+    portENTER_CRITICAL(&mux);
     getLocalTime(&time, 10);
+    portEXIT_CRITICAL(&mux);
     if (time.tm_sec == 0 && priv_sec != time.tm_sec) {
+        portENTER_CRITICAL(&mux);
         needsGenerate = true;
         generated_index = 0;
+        portEXIT_CRITICAL(&mux);
     }
     priv_sec = time.tm_sec;
     if (this->needsGenerate) {
@@ -129,8 +137,10 @@ void JJY::update() {
 }
 
 void JJY::debug(M5Canvas *canvas) {
+    portENTER_CRITICAL(&mux);
     canvas->printf("time: %d/%d/%d %d:%d:%d\n", 1900 + time.tm_year,
                    time.tm_mon + 1, time.tm_mday, time.tm_hour, time.tm_min,
                    time.tm_sec);
     canvas->printf("c: %d %d\n", generated_index, generated[generated_index]);
+    portEXIT_CRITICAL(&mux);
 }

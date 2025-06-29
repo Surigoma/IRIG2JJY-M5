@@ -26,6 +26,7 @@ class IRIG {
     struct tm getTm() { return this->time; }
 
    private:
+    portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
     struct tm time = {0};
     volatile bool needDecode = false;
     volatile unsigned long privTime = 0;

@@ -8,7 +8,11 @@ void IRIG::initialize(uint8_t pin, void (*callback)()) {
     attachInterrupt(digitalPinToInterrupt(pin), callback, CHANGE);
 }
 
-void IRIG::onEdgeRising() { privTime = millis(); }
+void IRIG::onEdgeRising() {
+    portENTER_CRITICAL(&mux);
+    privTime = millis();
+    portEXIT_CRITICAL(&mux);
+}
 
 IRIGResult IRIG::onEdgeFall() {
     long diff = millis() - privTime;
@@ -26,6 +30,7 @@ IRIGResult IRIG::onEdgeFall() {
         return IRIGResult::NONE;
     }
     if (code == IRIG_M && privCode == IRIG_M) {
+        portENTER_CRITICAL(&mux);
         listen[listenIndex++] = code;
         if (listenIndex >= container_of(listen)) {
             listenIndex = 0;
@@ -35,6 +40,7 @@ IRIGResult IRIG::onEdgeFall() {
             needDecode = true;
             result = IRIGResult::DETECT_FIRST;
         }
+        portEXIT_CRITICAL(&mux);
     }
     privCode = code;
     return result;
@@ -99,6 +105,7 @@ void IRIG::decodeIRIG() {
     static struct tm current = {0};
     volatile int8_t *ptr = captured;
     struct timeval now = {0};
+    portENTER_CRITICAL(&mux);
     time = {0};
     ptr++;  // Skip Marker
     ptr = decodeBCD2(ptr, &time.tm_sec);
@@ -117,15 +124,18 @@ void IRIG::decodeIRIG() {
         current.tm_hour != time.tm_hour || current.tm_min != time.tm_min) {
         settimeofday(&now, NULL);
     }
+    portEXIT_CRITICAL(&mux);
 }
 
 void IRIG::update() {
+    portENTER_CRITICAL(&mux);
     if (this->needDecode) {
         if (validateIRIG()) {
             decodeIRIG();
         }
         this->needDecode = false;
     }
+    portEXIT_CRITICAL(&mux);
     return;
 }
 
@@ -133,6 +143,7 @@ void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData = false) {
     if (canvas) {
         return;
     }
+    portENTER_CRITICAL(&mux);
     canvas->printf("D:%d %d %d:%d:%d %s\n", time.tm_year + 1900, time.tm_yday,
                    time.tm_hour, time.tm_min, time.tm_sec,
                    needDecode ? "*" : "");
@@ -152,4 +163,5 @@ void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData = false) {
             }
         }
     }
+    portEXIT_CRITICAL(&mux);
 }
