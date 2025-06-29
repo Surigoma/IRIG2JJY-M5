@@ -44,7 +44,7 @@ uint64_t clockManager::clock() {
         return (div_base / HZ);
     }
     for (size_t i = 0U; i < logLen; i++) {
-        sum += log[write_index];
+        sum += log[i];
     }
     int64_t avg = (int64_t)(double)(sum / logLen / div) /
                   4;  // * (((float)getApbFrequency() / MHZ) /
