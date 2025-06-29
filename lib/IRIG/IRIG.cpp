@@ -27,7 +27,7 @@ IRIGResult IRIG::onEdgeFall() {
     if (diff >= 7) {
         code = IRIG_M;
     }
-    if (code < IRIG_M) {
+    if (code < IRIG_M || diff > 12) {
         return IRIGResult::NONE;
     }
     portENTER_CRITICAL_ISR(&mux);
