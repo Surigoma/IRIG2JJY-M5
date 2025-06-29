@@ -19,7 +19,7 @@ class IRIG {
     void initialize(uint8_t pin, void (*callback)());
     void onEdgeRising();
     IRIGResult onEdgeFall();
-    void debug(M5Canvas *canvas, bool dumpCaptureData);
+    void debug(M5Canvas *canvas, bool dumpCaptureData = false);
     int8_t nextCode();
     void resetIndex();
     void update();

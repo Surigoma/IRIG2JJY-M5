@@ -139,7 +139,7 @@ void IRIG::update() {
     return;
 }
 
-void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData = false) {
+void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData) {
     if (canvas) {
         return;
     }
