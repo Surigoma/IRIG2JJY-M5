@@ -59,6 +59,9 @@ class JJY {
      * @param t struct tm value
      */
     void setTime(const struct tm &t) { time = t; }
+    inline int getIndex() {
+        return generated_index;  ///< Get current index
+    }
 
    private:
     portMUX_TYPE mux =
