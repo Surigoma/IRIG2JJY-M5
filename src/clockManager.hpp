@@ -32,7 +32,7 @@ class clockManager {
     bool JJYEdge();
     bool calcEdge();
     uint64_t clock();
-    void debug(M5Canvas *canvas);
+    void debug(M5Canvas *canvas, bool dumpCaptureData = false);
     uint16_t getDiv() { return div; }
     uint16_t getHz() { return HZ; }
 };

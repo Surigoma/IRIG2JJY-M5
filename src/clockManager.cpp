@@ -60,17 +60,17 @@ uint64_t clockManager::clock() {
     priv = result;
     return result;
 }
-void clockManager::debug(M5Canvas *canvas) {
+void clockManager::debug(M5Canvas *canvas, bool dumpCaptureData) {
     uint64_t sum = 0;
     for (size_t i = 1U; i < logLen - 1; i++) {
         sum += log[(write_index + i) % counter] - log[write_index];
     }
     canvas->printf("c: %lld %lld\n", diff, priv);
-    // canvas->printf("c: %d\nc: %lu %lu %llu %lld\n", counter,
-    // getApbFrequency(), div_base, clockbase, mulclock);
-    //  canvas->printf("c:");
-    //  for (int i = 0; i < logLen; i++){
-    //      canvas->printf(" %lld", log[i]);
-    //  }
-    //  canvas->printf("\n");
+    if (dumpCaptureData) {
+        canvas->printf("c: %d\n", counter);
+        for (size_t i = 0U; i < logLen; i++) {
+            canvas->printf(" %lld", log[i]);
+        }
+        canvas->printf("\n");
+    }
 }
