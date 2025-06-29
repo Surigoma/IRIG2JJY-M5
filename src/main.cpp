@@ -1,3 +1,6 @@
+// main.cpp - Main entry for JJY/IRIG signal processing
+// MIT License (c) 2025 Surigoma
+
 #include <M5GFX.h>
 #include <M5Unified.h>
 
@@ -7,22 +10,50 @@
 #include "define.hpp"
 #define container_of(a) (sizeof(a) / sizeof(a[0]))
 
+/**
+ * @brief Task handle array
+ */
 TaskHandle_t tasks[2];
 
+/**
+ * @brief Timer interrupt semaphore
+ */
 volatile SemaphoreHandle_t timerSemaphore;
 
+/**
+ * @brief Canvas for drawing
+ */
 static M5Canvas *canvas;
 
+/**
+ * @brief Mutexes for interrupt protection
+ */
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 portMUX_TYPE irigMux = portMUX_INITIALIZER_UNLOCKED;
 
 #define JJY_HZ 10
+/**
+ * @brief Counter for JJY output
+ */
 volatile int jjyCounter = 0;
 
+/**
+ * @brief Clock management class
+ */
 clockManager cm(80, JJY_HZ);
+/**
+ * @brief IRIG signal decoder
+ */
 IRIG irig;
+/**
+ * @brief JJY signal encoder
+ */
 JJY jjy;
 
+/**
+ * @brief IRIG signal rising/falling edge interrupt handler
+ * @note Operates IRIG/clockManager/JJY within interrupt
+ */
 void IRAM_ATTR onIRIGEdge() {
     portENTER_CRITICAL_ISR(&irigMux);
     bool isHigh = digitalRead(IRIG_PIN);
@@ -38,6 +69,10 @@ void IRAM_ATTR onIRIGEdge() {
     portEXIT_CRITICAL_ISR(&irigMux);
 }
 
+/**
+ * @brief JJY output timer interrupt handler
+ * @note Operates JJY/clockManager within interrupt
+ */
 void IRAM_ATTR onOutTimer() {
     portENTER_CRITICAL_ISR(&timerMux);
     int data = jjy.read_isr();
@@ -57,11 +92,18 @@ void IRAM_ATTR onOutTimer() {
     digitalWrite(LED_PIN, data > i ? LOW : HIGH);
 }
 
+/**
+ * @brief Update LCD display
+ */
 void updateScreen() {
     M5.Display.startWrite();
     canvas->pushSprite(0, 0);
     M5.Display.endWrite();
 }
+
+/**
+ * @brief Initialize LCD and create canvas
+ */
 void initializeLCD() {
     M5.Display.begin();
     M5.Display.fillScreen(BLUE);
@@ -82,8 +124,14 @@ void initializeLCD() {
     updateScreen();
 }
 
+/**
+ * @brief Initialize timer semaphore
+ */
 void initializeTimer() { timerSemaphore = xSemaphoreCreateBinary(); }
 
+/**
+ * @brief Initialize M5Stack hardware, etc.
+ */
 void initializeHW() {
     auto M5cfg = M5.config();
     M5cfg.serial_baudrate = 115200;
@@ -95,6 +143,10 @@ void initializeHW() {
     digitalWrite(LED_PIN, HIGH);
 }
 
+/**
+ * @brief IRIG signal processing task
+ * @param arg Pointer to IRIG instance
+ */
 void irigTask(void *arg) {
     IRIG *irig = (IRIG *)arg;
     irig->initialize(IRIG_PIN, onIRIGEdge);
@@ -103,6 +155,10 @@ void irigTask(void *arg) {
     }
 }
 
+/**
+ * @brief JJY signal processing task
+ * @param arg Pointer to JJY instance
+ */
 void jjyTask(void *arg) {
     JJY *jjy = (JJY *)arg;
     jjy->initialize(JJY_PIN, cm.getDiv(), cm.clock(), onOutTimer);
@@ -111,6 +167,9 @@ void jjyTask(void *arg) {
     }
 }
 
+/**
+ * @brief Create and start tasks
+ */
 void taskSetup() {
     xTaskCreatePinnedToCore(irigTask, "IRIG task", 4096, &irig, 2, &tasks[0],
                             PRO_CPU_NUM);
@@ -118,6 +177,9 @@ void taskSetup() {
                             APP_CPU_NUM);
 }
 
+/**
+ * @brief Arduino setup function
+ */
 void setup() {
     initializeHW();
     initializeLCD();
@@ -126,6 +188,10 @@ void setup() {
     Serial.printf("Board: %d\n", M5.getBoard());
 }
 
+/**
+ * @brief Arduino loop function
+ * @note Handles debug display, screen update, and reset process
+ */
 static int counter = 0;
 static uint64_t current, privClock = cm.clock();
 void loop() {
