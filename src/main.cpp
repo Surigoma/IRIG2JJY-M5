@@ -208,7 +208,7 @@ static int counter = 0;
 static uint64_t current, privClock = cm.clock();
 void loop() {
     counter++;
-    bool update = counter > 5;
+    bool update = counter > 50;
     M5.update();
     if (update) {
         canvas->fillSprite(BLACK);
