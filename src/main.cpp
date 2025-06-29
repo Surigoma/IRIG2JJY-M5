@@ -1,6 +1,5 @@
 #include <M5GFX.h>
 #include <M5Unified.h>
-#include <WiFi.h>
 
 #include "IRIG.hpp"
 #include "JJY.hpp"

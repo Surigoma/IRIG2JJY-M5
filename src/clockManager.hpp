@@ -2,10 +2,6 @@
 #define __CLOCKMANAGER_HPP__
 #include <M5Unified.h>
 
-#include <queue>
-
-using namespace std;
-
 class clockManager {
    private:
     int64_t log[5];
