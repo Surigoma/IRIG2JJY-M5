@@ -111,6 +111,11 @@ void JJY::generateJJY() {
 
 int8_t JJY::read_isr() {
     portENTER_CRITICAL_ISR(&mux);
+    if (time.tm_sec == 0 && priv_sec != time.tm_sec) {
+        needsGenerate = true;
+        generated_index = 0;
+    }
+    priv_sec = time.tm_sec;
     int8_t r = generated[generated_index++];
     if (generated[generated_index] == jjy_signal[JJY_E] ||
         generated_index >= container_of(generated)) {
@@ -124,13 +129,6 @@ void JJY::update() {
     if (!getLocalTime(&time, 10)) {
         return;
     }
-    portENTER_CRITICAL(&mux);
-    if (time.tm_sec == 0 && priv_sec != time.tm_sec) {
-        needsGenerate = true;
-        generated_index = 0;
-    }
-    priv_sec = time.tm_sec;
-    portEXIT_CRITICAL(&mux);
     if (this->needsGenerate) {
         generateJJY();
     }
