@@ -125,6 +125,7 @@ void IRIG::decodeIRIG() {
     time.tm_mday++;
     ptr += 6;  // Skip Marker
     ptr = decodeBCD2(ptr, &time.tm_year);
+    time.tm_year += 100;  // Adjust for 2000s
     portEXIT_CRITICAL(&mux);
     now = {.tv_sec = mktime(&time), .tv_usec = 0};
     getLocalTime(&current, 10);
