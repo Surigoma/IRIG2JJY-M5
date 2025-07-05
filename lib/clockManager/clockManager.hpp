@@ -3,7 +3,17 @@
 #include <M5Unified.h>
 
 /**
- * @brief Class for clock and timing management
+ * @class clockManager
+ * @brief Class for clock and timing management.
+ *
+ * This class records edge timings of IRIG and JJY signals, and performs
+ * calculations and logging for frequency correction and time synchronization.
+ * It supports interrupt-safe buffer management and provides debug information
+ * output.
+ *
+ * - Records and calculates differences of IRIG/JJY edges
+ * - Provides access to frequency and divider values
+ * - All public methods and members are documented with Doxygen comments
  */
 class clockManager {
    private:

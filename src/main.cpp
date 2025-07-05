@@ -1,3 +1,13 @@
+/**
+ * @file main.cpp
+ * @brief Main entry point for IRIG2JJY-M5 firmware.
+ *
+ * This file contains the main setup and loop for the M5Stack (M5StickC Plus)
+ * firmware that decodes IRIG-B time codes and generates JJY signals. It
+ * initializes hardware, sets up multitasking and interrupt handling, and
+ * manages the main application flow.
+ */
+
 // main.cpp - Main entry for JJY/IRIG signal processing
 // MIT License (c) 2025 Surigoma
 

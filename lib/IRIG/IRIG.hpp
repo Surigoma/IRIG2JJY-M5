@@ -17,7 +17,17 @@ enum IRIGResult {
 };
 
 /**
- * @brief IRIG signal decoder class
+ * @class IRIG
+ * @brief Class for decoding IRIG-B time signals.
+ *
+ * This class detects rising and falling edges of IRIG-B signals using GPIO pins
+ * and interrupts on the M5Stack (M5StickC Plus), and decodes 1-minute time
+ * information from the captured data. It provides interrupt-safe buffer
+ * management and public setters for testing.
+ *
+ * - Captures and decodes IRIG-B signals
+ * - Provides setters for test buffers and decode flags
+ * - All public methods and members are documented with Doxygen comments
  */
 class IRIG {
    public:

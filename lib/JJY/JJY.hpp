@@ -9,7 +9,17 @@
 enum JJY_SIGNAL { JJY_0 = 0, JJY_1, JJY_M, JJY_E };
 
 /**
- * @brief JJY signal encoder class
+ * @class JJY
+ * @brief Class for encoding and outputting JJY radio time signals.
+ *
+ * This class generates and outputs JJY signals for radio clocks using the GPIO
+ * pins and hardware timer of the M5Stack (M5StickC Plus). It creates 1-minute
+ * JJY encoded data based on time information (typically synchronized via
+ * IRIG-B), and manages the output buffer in an interrupt-safe manner.
+ *
+ * - Provides read_isr() for safe access from interrupt handlers
+ * - Includes utilities such as setTime() and resetIndex() for testing
+ * - All public methods and members are documented with Doxygen comments
  */
 class JJY {
    public:

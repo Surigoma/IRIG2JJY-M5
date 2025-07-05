@@ -1,3 +1,13 @@
+/**
+ * @file define.hpp
+ * @brief Pin definitions and board configuration macros for IRIG2JJY-M5
+ * firmware.
+ *
+ * This header defines the GPIO pin assignments for IRIG input, JJY output, and
+ * LED output for the M5Stack M5StickC Plus platform. If the board is not
+ * supported, a compile-time error is raised.
+ */
+
 #include <Arduino.h>
 
 #if defined(MODEL_M5STICK)
