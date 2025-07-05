@@ -205,3 +205,30 @@ void JJY::debug(M5Canvas *canvas, bool dumpGenerateData) {
     canvas->printf("c: %d %d\n", generated_index, generated[generated_index]);
     portEXIT_CRITICAL(&mux);
 }
+
+void JJY::dumpGeneratedData() {
+    Serial.printf("time: %04d/%02d/%02d %02d:%02d:%02d\n", 1900 + time.tm_year,
+                  time.tm_mon + 1, time.tm_mday, time.tm_hour, time.tm_min,
+                  time.tm_sec);
+    Serial.printf("JJY generated data:\n");
+    for (int i = 0; i < container_of(generated); i++) {
+        if (generated[i] == jjy_signal[JJY_0]) {
+            Serial.print("0");
+        } else if (generated[i] == jjy_signal[JJY_1]) {
+            Serial.print("1");
+        } else if (generated[i] == jjy_signal[JJY_M]) {
+            Serial.print("*");
+        } else if (generated[i] == jjy_signal[JJY_J]) {
+            Serial.print("J");
+        } else if (generated[i] == jjy_signal[JJY_E]) {
+            Serial.print("E");
+        } else {
+            Serial.print("?");
+        }
+        if ((i + 1) % 20 == 0) {
+            Serial.println();
+        }
+    }
+    Serial.println();
+}
+int8_t *JJY::getGeneratedData() { return (int8_t *)generated; }

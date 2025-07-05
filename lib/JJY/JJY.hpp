@@ -68,7 +68,12 @@ class JJY {
      * @brief Set the current time for JJY signal generation (for testing)
      * @param t struct tm value
      */
-    void setTime(const struct tm &t) { time = t; }
+    void setTime(const struct tm *t) {
+        memcpy(&time, t, sizeof(time));
+        Serial.printf("JJY time set to %04d-%02d-%02d %02d:%02d:%02d\n",
+                      time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,
+                      time.tm_hour, time.tm_min, time.tm_sec);
+    }
 
     /**
      * @brief Get the current Morse code signal value
@@ -83,6 +88,19 @@ class JJY {
     inline int getIndex() {
         return generated_index;  ///< Get current index
     }
+    /**
+     * @brief Reset the output buffer index (for testing)
+     */
+    inline void resetIndex() {
+        portENTER_CRITICAL(&mux);
+        generated_index =
+            0;             ///< Reset index to start reading from the beginning
+        nextReset = true;  ///< Set flag to reset on next read
+        portEXIT_CRITICAL(&mux);
+    }
+    void
+    dumpGeneratedData();  ///< Dump generated JJY data to Serial for debugging
+    int8_t *getGeneratedData();  ///< Get generated JJY data for testing
 
    private:
     portMUX_TYPE mux =
