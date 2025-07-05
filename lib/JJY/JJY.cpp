@@ -161,11 +161,47 @@ void JJY::update() {
     }
 }
 
-void JJY::debug(M5Canvas *canvas) {
+void JJY::debug(M5Canvas *canvas, bool dumpGenerateData) {
+    static int32_t fw = canvas->textWidth("1") - 1;
+    static int32_t fh = fw * canvas->getTextSizeY() - 1;
     portENTER_CRITICAL(&mux);
     canvas->printf("time: %04d/%02d/%02d %02d:%02d:%02d\n", 1900 + time.tm_year,
                    time.tm_mon + 1, time.tm_mday, time.tm_hour, time.tm_min,
                    time.tm_sec);
+    if (dumpGenerateData) {
+        int mcount = 0;
+        for (int i = 0; i < container_of(generated); i++) {
+            if (generated_index == i) {
+                int32_t x = canvas->getCursorX();
+                int32_t y = canvas->getCursorY();
+                canvas->fillRect(x, y, fw, fh, DARKGREY);
+            }
+            if (generated[i] == jjy_signal[JJY_0]) {
+                canvas->setTextColor(BLUE);
+                canvas->printf("0");
+            } else if (generated[i] == jjy_signal[JJY_1]) {
+                canvas->setTextColor(RED);
+                canvas->printf("1");
+            } else if (generated[i] == jjy_signal[JJY_M]) {
+                canvas->setTextColor(WHITE);
+                canvas->printf("M");
+            } else if (generated[i] == jjy_signal[JJY_J]) {
+                canvas->setTextColor(GREEN);
+                canvas->printf("J");
+            } else if (generated[i] == jjy_signal[JJY_E]) {
+                canvas->setTextColor(DARKCYAN);
+                canvas->printf("E");
+            } else {
+                canvas->setTextColor(PURPLE);
+                canvas->printf("E ");
+            }
+            if (i % 20 == 19) {
+                canvas->printf("\n");
+            }
+        }
+        canvas->setTextColor(WHITE);
+        canvas->printf("\n");
+    }
     canvas->printf("c: %d %d\n", generated_index, generated[generated_index]);
     portEXIT_CRITICAL(&mux);
 }

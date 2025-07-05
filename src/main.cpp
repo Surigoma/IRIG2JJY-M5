@@ -230,8 +230,8 @@ void loop() {
         canvas->setCursor(0, 0);
         counter = 0;
         cm.debug(canvas);
-        irig.debug(canvas, true);
-        jjy.debug(canvas);
+        irig.debug(canvas);
+        jjy.debug(canvas, true);
         canvas->printf("m: %d\n", jjyCounter);
     }
     current = cm.clock();

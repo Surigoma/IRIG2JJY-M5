@@ -63,7 +63,7 @@ class JJY {
      * @brief Print debug information to canvas
      * @param canvas Canvas object
      */
-    void debug(M5Canvas *canvas);
+    void debug(M5Canvas *canvas, bool dumpGenerateData = false);
     /**
      * @brief Set the current time for JJY signal generation (for testing)
      * @param t struct tm value
