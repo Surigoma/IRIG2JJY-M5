@@ -79,7 +79,7 @@ volatile int8_t *JJY::insertParity(volatile int8_t *o, int v,
             h -= parityTbl[index];
         }
     }
-    *o = r & 0b1;
+    *o = r & 0b1 == 1 ? jjy_signal[JJY_1] : jjy_signal[JJY_0];
     return o + 1;
 }
 void JJY::generateJJY() {
