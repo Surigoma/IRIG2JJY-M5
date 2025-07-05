@@ -41,6 +41,9 @@ void test_IRIG_decode_testdata() {
     irig.setNeedDecode(true);
     irig.update();
     struct tm t = irig.getTm();
+    Serial.printf("Decoded date: %04d/%02d/%02d %02d:%02d:%02d\n",
+                  1900 + t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour,
+                  t.tm_min, t.tm_sec);
     // Check decoded values (expected: 2025/7/2 23:59:59)
     TEST_ASSERT_EQUAL(59, t.tm_sec);
     TEST_ASSERT_EQUAL(59, t.tm_min);
