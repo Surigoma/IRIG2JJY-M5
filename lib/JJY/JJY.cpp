@@ -114,6 +114,7 @@ void JJY::generateJJY() {
         itr = insertMarker(itr);
         itr = insertZero(itr, 6);  // Broadcast outage notice
         itr = insertZero(itr, 3);
+        itr = insertMarker(itr);
     } else {
         itr = encodeIBCD(itr, time.tm_year, yearTbl, container_of(yearTbl));
         itr = insertMarker(itr);
