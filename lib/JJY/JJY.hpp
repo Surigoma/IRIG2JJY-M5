@@ -76,6 +76,10 @@ class JJY {
      */
     inline int getMorse() { return jjy_signal[JJY_J]; }
 
+    /**
+     * @brief Get the current output buffer index
+     * @return Current index of the generated JJY data buffer
+     */
     inline int getIndex() {
         return generated_index;  ///< Get current index
     }
