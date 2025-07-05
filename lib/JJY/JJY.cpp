@@ -110,7 +110,7 @@ void JJY::generateJJY() {
     itr = insertZero(itr, 1);
     itr = insertMarker(itr);
     if (time.tm_min == 15 || time.tm_min == 45) {
-        itr = insertMorse(itr, 8);  // JJY Morse (not send Morse)
+        itr = insertMorse(itr, 9);  // JJY Morse (not send Morse)
         itr = insertMarker(itr);
         itr = insertZero(itr, 6);  // Broadcast outage notice
         itr = insertZero(itr, 3);
