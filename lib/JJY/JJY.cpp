@@ -64,7 +64,7 @@ volatile int8_t *JJY::insertZero(volatile int8_t *o, size_t len) {
 volatile int8_t *JJY::insertMorse(volatile int8_t *o, size_t len) {
     volatile int8_t *itr = o;
     for (size_t i = 0; i < len; i++) {
-        *itr = jjy_signal[JJY_M];
+        *itr = jjy_signal[JJY_J];
         itr++;
     }
     return itr;
