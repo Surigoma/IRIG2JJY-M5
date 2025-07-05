@@ -6,7 +6,7 @@
 /**
  * @brief JJY signal type enumeration
  */
-enum JJY_SIGNAL { JJY_0 = 0, JJY_1, JJY_M, JJY_E };
+enum JJY_SIGNAL { JJY_0 = 0, JJY_1, JJY_M, JJY_E, JJY_J };
 
 /**
  * @class JJY
@@ -69,6 +69,13 @@ class JJY {
      * @param t struct tm value
      */
     void setTime(const struct tm &t) { time = t; }
+
+    /**
+     * @brief Get the current Morse code signal value
+     * @return Value of the Morse code signal in the JJY signal pattern table
+     */
+    inline int getMorse() { return jjy_signal[JJY_J]; }
+
     inline int getIndex() {
         return generated_index;  ///< Get current index
     }
@@ -88,6 +95,7 @@ class JJY {
     volatile int8_t *insertParity(volatile int8_t *o, int v,
                                   const int parityTbl[], size_t parityTblLen);
     volatile int8_t *insertZero(volatile int8_t *o, size_t len);
+    volatile int8_t *insertMorse(volatile int8_t *o, size_t len);
     volatile int8_t *insertMarker(volatile int8_t *o);
     volatile int8_t *insertEND(volatile int8_t *o);
     volatile int8_t *encodeIBCD(volatile int8_t *o, int r, const int tbl[],

@@ -15,6 +15,7 @@ void JJY::initialize(uint8_t pin, uint16_t divide, uint16_t Hz, uint64_t time,
     jjy_signal[JJY_1] = 0.5 * Hz;
     jjy_signal[JJY_M] = 0.2 * Hz;
     jjy_signal[JJY_E] = -1;
+    jjy_signal[JJY_J] = -2;
     for (int i = 0; i < container_of(generated); i++) {
         generated[i] = jjy_signal[JJY_E];
     }
@@ -60,6 +61,14 @@ volatile int8_t *JJY::insertZero(volatile int8_t *o, size_t len) {
     }
     return itr;
 }
+volatile int8_t *JJY::insertMorse(volatile int8_t *o, size_t len) {
+    volatile int8_t *itr = o;
+    for (size_t i = 0; i < len; i++) {
+        *itr = jjy_signal[JJY_M];
+        itr++;
+    }
+    return itr;
+}
 volatile int8_t *JJY::insertParity(volatile int8_t *o, int v,
                                    const int parityTbl[], size_t parityTblLen) {
     int h = v;
@@ -100,12 +109,19 @@ void JJY::generateJJY() {
                        container_of(minParityTbl));
     itr = insertZero(itr, 1);
     itr = insertMarker(itr);
-    itr = encodeIBCD(itr, time.tm_year, yearTbl, container_of(yearTbl));
-    itr = insertMarker(itr);
-    itr = encodeIBCD(itr, time.tm_wday, wdayTbl, container_of(wdayTbl));
-    itr = insertZero(itr, 2);
-    itr = insertZero(itr, 4);
-    itr = insertMarker(itr);
+    if (time.tm_min == 15 || time.tm_min == 45) {
+        itr = insertMorse(itr, 8);  // JJY Morse (not send Morse)
+        itr = insertMarker(itr);
+        itr = insertZero(itr, 6);  // Broadcast outage notice
+        itr = insertZero(itr, 3);
+    } else {
+        itr = encodeIBCD(itr, time.tm_year, yearTbl, container_of(yearTbl));
+        itr = insertMarker(itr);
+        itr = encodeIBCD(itr, time.tm_wday, wdayTbl, container_of(wdayTbl));
+        itr = insertZero(itr, 2);  // Leap second information
+        itr = insertZero(itr, 4);
+        itr = insertMarker(itr);
+    }
     itr = insertEND(itr);
     needsGenerate = false;
     portEXIT_CRITICAL(&mux);

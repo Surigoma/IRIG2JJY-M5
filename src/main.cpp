@@ -87,6 +87,7 @@ void IRAM_ATTR onOutTimer() {
     portENTER_CRITICAL_ISR(&timerMux);
     static int data = 0;
     int i = jjyCounter;
+    static bool isHigh = false;
     if (jjyCounter == 0) {
         if (cm.JJYEdge()) {
             xSemaphoreGiveFromISR(timerSemaphore, NULL);
@@ -99,8 +100,10 @@ void IRAM_ATTR onOutTimer() {
     }
     portEXIT_CRITICAL_ISR(&timerMux);
 
-    digitalWrite(JJY_PIN, data > i ? HIGH : LOW);
-    digitalWrite(LED_PIN, data > i ? LOW : HIGH);
+    isHigh = data != jjy.getMorse() && data > i;
+
+    digitalWrite(JJY_PIN, isHigh ? HIGH : LOW);
+    digitalWrite(LED_PIN, isHigh ? LOW : HIGH);
     digitalWrite(GPIO_NUM_0,
                  jjyCounter == 0 && jjy.getIndex() == 0 ? LOW : HIGH);
 }
