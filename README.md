@@ -2,7 +2,7 @@
 
 # IRIG2JJY-M5
 
-A project for decoding IRIG time codes and generating JJY signals using M5Stack (M5StickC Plus).
+A firmware for M5Stack (M5StickC Plus) that decodes IRIG-B time codes and generates JJY signals for radio clocks. Provides real-time clock synchronization and LCD debug display with multitasking/interrupt-safe design.
 
 ## Features
 
@@ -22,16 +22,17 @@ A project for decoding IRIG time codes and generating JJY signals using M5Stack 
 ## Getting Started
 
 1. **Clone this repository**
-2. **Open with PlatformIO or Arduino IDE**
+2. **Open with PlatformIO (recommended) or Arduino IDE**
 3. **Select the correct board (M5StickC Plus)**
-4. **Build and upload**
+4. **Install required libraries** (e.g. M5StickCPlus, ArduinoJson, etc. if prompted)
+5. **Build and upload**
 
 ## File Structure
 
 - `src/` : Main source code
 - `include/` : Header files
 - `lib/` : External libraries (if any)
-- `test/` : Test code
+- `test/` : Unit test code (PlatformIO/Unity)
 
 ## Main Components
 
@@ -48,8 +49,27 @@ A project for decoding IRIG time codes and generating JJY signals using M5Stack 
 - Debug information is shown on the LCD.
 - Press Button A to reset the device.
 
+## Testing
+
+- Unit tests for IRIG, JJY, and clockManager are provided in the `test/` directory.
+- To run tests with PlatformIO:
+  ```
+  pio test
+  ```
+
+## Documentation
+
+- All major classes and functions are documented with Doxygen-style comments.
+- To generate API documentation:
+  ```
+  doxygen
+  ```
+  (Requires Doxygen to be installed)
+
+## Contributing
+
+Bug reports and pull requests are welcome. Please open an issue for questions or suggestions.
+
 ## License
 
 MIT License (c) 2025 Surigoma
-
-[日本語版 README はこちら](README.ja.md)
