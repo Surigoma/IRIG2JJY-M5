@@ -116,7 +116,7 @@ void JJY::generateJJY() {
         itr = insertZero(itr, 3);
         itr = insertMarker(itr);
     } else {
-        itr = encodeIBCD(itr, time.tm_year, yearTbl, container_of(yearTbl));
+        itr = encodeIBCD(itr, y, yearTbl, container_of(yearTbl));
         itr = insertMarker(itr);
         itr = encodeIBCD(itr, time.tm_wday, wdayTbl, container_of(wdayTbl));
         itr = insertZero(itr, 2);  // Leap second information
