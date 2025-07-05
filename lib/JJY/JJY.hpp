@@ -83,6 +83,8 @@ class JJY {
     volatile int8_t generated[62] = {0};  ///< Generated JJY data buffer
     int generated_index = 0;              ///< Output buffer index
     bool needsGenerate = false;           ///< Flag for regeneration
+    bool nextReset = false;  ///< Flag indicating whether the output buffer
+                             ///< should be reset on the next cycle
     volatile int8_t *insertParity(volatile int8_t *o, int v,
                                   const int parityTbl[], size_t parityTblLen);
     volatile int8_t *insertZero(volatile int8_t *o, size_t len);
