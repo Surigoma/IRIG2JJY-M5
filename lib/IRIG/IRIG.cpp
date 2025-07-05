@@ -148,8 +148,8 @@ void IRIG::debug(M5Canvas *canvas, bool dumpCaptureData) {
     if (canvas == nullptr) {
         return;
     }
-    canvas->printf("D:%d %d %d:%d:%d %s\n", time.tm_year + 1900, time.tm_yday,
-                   time.tm_hour, time.tm_min, time.tm_sec,
+    canvas->printf("D:%04d %03d %02d:%02d:%02d %s\n", time.tm_year + 1900,
+                   time.tm_yday, time.tm_hour, time.tm_min, time.tm_sec,
                    needDecode ? "*" : "");
     if (dumpCaptureData) {
         int mcount = 0;

@@ -144,7 +144,7 @@ void JJY::update() {
 
 void JJY::debug(M5Canvas *canvas) {
     portENTER_CRITICAL(&mux);
-    canvas->printf("time: %d/%d/%d %d:%d:%d\n", 1900 + time.tm_year,
+    canvas->printf("time: %04d/%02d/%02d %02d:%02d:%02d\n", 1900 + time.tm_year,
                    time.tm_mon + 1, time.tm_mday, time.tm_hour, time.tm_min,
                    time.tm_sec);
     canvas->printf("c: %d %d\n", generated_index, generated[generated_index]);
