@@ -11,6 +11,9 @@ void JJY::initialize(uint8_t pin, uint16_t divide, uint16_t Hz, uint64_t time,
     timerAlarmWrite(this->timer, time, true);
     timerAlarmEnable(this->timer);
     timerStop(this->timer);
+    for (int i = 0; i < container_of(generated); i++) {
+        generated[i] = -1;
+    }
     jjy_signal[JJY_0] = 0.8 * Hz;
     jjy_signal[JJY_1] = 0.5 * Hz;
     jjy_signal[JJY_M] = 0.2 * Hz;
