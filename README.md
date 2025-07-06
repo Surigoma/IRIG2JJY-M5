@@ -72,4 +72,9 @@ Bug reports and pull requests are welcome. Please open an issue for questions or
 
 ## License
 
-MIT License (c) 2025 Surigoma
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
+See [LICENSE](LICENSE) for details.
+
+- You may share and adapt the material for non-commercial purposes, with attribution.
+- Commercial use is not permitted.
+- Full license text: https://creativecommons.org/licenses/by-nc/4.0/

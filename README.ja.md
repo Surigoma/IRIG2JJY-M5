@@ -72,4 +72,9 @@ M5Stack (M5StickC Plus) を用いて IRIG-B 時刻信号をデコードし、ラ
 
 ## ライセンス
 
-MIT License (c) 2025 Surigoma
+本プロジェクトは Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) ライセンスの下で公開されています。
+詳細は [LICENSE](LICENSE) をご覧ください。
+
+- クレジット表示の上、非営利目的での利用・改変・再配布が可能です。
+- 商用利用は禁止されています。
+- ライセンス全文: https://creativecommons.org/licenses/by-nc/4.0/
